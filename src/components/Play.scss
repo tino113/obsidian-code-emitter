@@ -1,5 +1,6 @@
 :global {
-  pre:hover .button-play {
+  pre:hover .button-play,
+  pre:hover .button-repl {
     display: block;
   }
 }
@@ -11,18 +12,22 @@
 
 .code-emitter-block {
 
-  .button-play {
+  .button-play,
+  .button-repl {
     bottom: var(--size-2-2);
     display: flex;
 
     padding: var(--size-2-2) var(--size-2-3);
     position: absolute;
-    inset-inline-end: var(--size-2-2);
     border-radius: var(--radius-s);
     cursor: var(--cursor);
   }
 
-  .button-play:hover {
+  .button-play { inset-inline-end: var(--size-2-2); }
+  .button-repl { inset-inline-end: calc(var(--size-2-2) + 2.5em); }
+
+  .button-play:hover,
+  .button-repl:hover {
     background-color: var(--background-modifier-hover);
   }
 

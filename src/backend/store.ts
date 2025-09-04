@@ -4,6 +4,14 @@ export type Stdio = ReturnType<typeof createStdio>;
 export function createStdio<T = Message>() {
   let outputs: T[] = [];
   let subscribers: ((m: T[]) =>  void)[] = [];
+  let interactive = false;
+
+  const setInteractive = (v: boolean) => { interactive = v; };
+
+  const read = (msg?: string): string => {
+    if (!interactive) { return ''; }
+    return window.prompt(msg ?? '') ?? '';
+  };
   
   const update = (setter: (prev: T[]) => T[]) => {
     outputs = setter(outputs);
@@ -49,5 +57,7 @@ export function createStdio<T = Message>() {
     clear,
     update,
     set,
+    read,
+    setInteractive,
   };
 }

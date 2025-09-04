@@ -7,6 +7,8 @@ This plugin allows code blocks to be executed interactively like in Jupyter Note
 It has no external environment requirements (such as system installations of compilers), because code execution works via local sandboxes using JavaScript or WebAssembly technology, or network requests to online Playgrounds.
 This means it can support all platforms supported by Obsidian.
 
+An extra run button is available to launch code in a simple REPL mode so programs can request user input until they finish running.
+
 Supports all Obsidian supported platforms, including:
 
 - Windows

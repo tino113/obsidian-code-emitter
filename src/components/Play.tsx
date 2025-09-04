@@ -30,15 +30,20 @@ export default (props: {
 
   const [running, setRunning] = createSignal(false);
 
-  const run = async () => {
+  const run = async (interactive: boolean) => {
     setRunning(true);
+    stdio.setInteractive(interactive);
     try {
       const engine = backend[props.lang];
       await engine(props.code, stdio);
     } finally {
       setRunning(false);
+      stdio.setInteractive(false);
     }
   };
+
+  const runNormal = () => run(false);
+  const runRepl = () => run(true);
 
 
   const readFromCache = () => {
@@ -68,7 +73,7 @@ export default (props: {
     if (r) {
       stdio.set(r);
     } else if (props.autoRun) {
-      await run();
+      await runNormal();
     }
   });
 
@@ -77,7 +82,10 @@ export default (props: {
   return <>
     <div class="code-emitter-block solid">
       <Show when={ !running() && !hasResult()}>
-        <i aria-label="play" class="button-play" onClick={run}><Icon name="play"/></i>
+        <>
+          <i aria-label="play" class="button-play" onClick={runNormal}><Icon name="play"/></i>
+          <i aria-label="repl" class="button-repl" onClick={runRepl}><Icon name="repl"/></i>
+        </>
       </Show>
 
       <Show when={running() || hasResult() }>

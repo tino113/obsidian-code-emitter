@@ -52,7 +52,8 @@ export default (function(props?: { cdn: string }) {
     engine = await loader({
       indexURL: cdn,
       stdout: (s) => stdio?.stdout(s),
-      stderr:(s) => stdio?.stderr(s)
+      stderr:(s) => stdio?.stderr(s),
+      stdin: () => stdio?.read() ?? ''
     });
     await engine.loadPackage('micropip');
     console.log('python loaded.');
