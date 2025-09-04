@@ -6,7 +6,7 @@ export type { Stdio } from './store';
 
 export type Backend = {
     loading?: boolean;
-    (code: string, output: Stdio): Promise<void>
+    (code: string, output: Stdio, opts?: { repl?: boolean }): Promise<void>
 }
 
 

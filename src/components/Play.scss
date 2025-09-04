@@ -1,5 +1,6 @@
 :global {
-  pre:hover .button-play {
+  pre:hover .button-play,
+  pre:hover .button-repl {
     display: block;
   }
 }
@@ -20,6 +21,20 @@
     inset-inline-end: var(--size-2-2);
     border-radius: var(--radius-s);
     cursor: var(--cursor);
+  }
+
+  .button-repl {
+    bottom: var(--size-2-2);
+    display: flex;
+    padding: var(--size-2-2) var(--size-2-3);
+    position: absolute;
+    inset-inline-end: calc(var(--size-2-2) + 2em);
+    border-radius: var(--radius-s);
+    cursor: var(--cursor);
+  }
+
+  .button-repl:hover {
+    background-color: var(--background-modifier-hover);
   }
 
   .button-play:hover {
