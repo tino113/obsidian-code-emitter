@@ -30,11 +30,11 @@ export default (props: {
 
   const [running, setRunning] = createSignal(false);
 
-  const run = async () => {
+  const run = async (repl = false) => {
     setRunning(true);
     try {
       const engine = backend[props.lang];
-      await engine(props.code, stdio);
+      await engine(props.code, stdio, { repl });
     } finally {
       setRunning(false);
     }
@@ -77,7 +77,10 @@ export default (props: {
   return <>
     <div class="code-emitter-block solid">
       <Show when={ !running() && !hasResult()}>
-        <i aria-label="play" class="button-play" onClick={run}><Icon name="play"/></i>
+        <i aria-label="play" class="button-play" onClick={() => run(false)}><Icon name="play"/></i>
+        <Show when={props.lang === 'python'}>
+          <i aria-label="repl" class="button-repl" onClick={() => run(true)}><Icon name="terminal"/></i>
+        </Show>
       </Show>
 
       <Show when={running() || hasResult() }>

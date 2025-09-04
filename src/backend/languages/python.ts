@@ -29,14 +29,44 @@ export default (function(props?: { cdn: string }) {
   let engine: PyodideInterface | null = null;
   let stdio: Stdio | null = null;
   let load: (() => Promise<void>) | null = null;
-  const backend: Backend = async (code, output) => {
+  const backend: Backend = async (code, output, opts) => {
     if (!engine) {
       await load();
     }
     stdio = output;
     try {
       setMplTarget(output.viewEl);
-      await engine.runPythonAsync(code);
+      if (opts?.repl) {
+        const g = globalThis as { console_input?: (promptText?: string) => string };
+        g.console_input = (promptText?: string) => {
+          if (promptText) {
+            output.stdout(promptText);
+          }
+          const result =
+            typeof window !== 'undefined' && typeof window.prompt === 'function'
+              ? window.prompt(promptText ?? '') ?? ''
+              : '';
+          output.stdout(result);
+          return result;
+        };
+        await engine.runPythonAsync(`
+import builtins, js
+__orig_input = builtins.input
+builtins.input = js.console_input
+`);
+        try {
+          await engine.runPythonAsync(code);
+        } finally {
+          await engine.runPythonAsync(`
+import builtins
+builtins.input = __orig_input
+del __orig_input
+`);
+          delete g.console_input;
+        }
+      } else {
+        await engine.runPythonAsync(code);
+      }
     } catch (e) {
       output.stderr(e);
     } finally {
