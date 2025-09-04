@@ -42,7 +42,10 @@ export default (function(props?: { cdn: string }) {
           if (promptText) {
             output.stdout(promptText);
           }
-          const result = window.prompt(promptText ?? '') ?? '';
+          const result =
+            typeof window !== 'undefined' && typeof window.prompt === 'function'
+              ? window.prompt(promptText ?? '') ?? ''
+              : '';
           output.stdout(result);
           return result;
         };
